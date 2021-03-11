@@ -6,38 +6,20 @@ import (
 	"log"
 	"time"
 
-	"github.com/MohitVachhani/go-learn/pkg/utils"
+	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
+	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
-
-func createMongoClient(ctx context.Context) *mongo.Client {
-
-	client, err := mongo.NewClient(options.Client().ApplyURI(utils.Get("MONGO_URI")))
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = client.Connect(ctx)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Connected to mongo!!")
-
-	return client
-}
 
 func connectMongoAndQueryDatabase() {
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	mongoClient := createMongoClient(ctx)
+	mongoURI := envUtil.Get("MONGO_URI")
+
+	mongoClient := mongoUtils.CreateMongoClient(ctx, mongoURI)
 
 	defer mongoClient.Disconnect(ctx)
 
@@ -65,9 +47,9 @@ Done:
 1. Find how to call functions which are in another file
 2. Find how to call functions which are in another package
 3. Learn how to use env variables.
+4. Make a util function for creating mongo client.
 
 To Do:
-4. Make a function for creating mongo client.
 5. Fetch all the data from a collection.
 6. Make a repo layer for the same collection.
 7. Create endpoints regarding CRUD-user.
