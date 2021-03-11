@@ -10,7 +10,6 @@ import (
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 func connectMongoAndQueryDatabase() {
@@ -23,19 +22,17 @@ func connectMongoAndQueryDatabase() {
 
 	defer mongoClient.Disconnect(ctx)
 
-	err := mongoClient.Ping(ctx, readpref.Primary())
+	userCollection := mongoClient.Database("test").Collection("users")
+
+	var user bson.M
+
+	err := userCollection.FindOne(ctx, bson.M{"emailId": "mohitvachhanispam@gmail.com"}).Decode(&user)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// BSON is the binary encoding of JSON-like documents that MongoDB uses when storing documents in collections
-	databaseNames, err := mongoClient.ListDatabaseNames(ctx, bson.M{})
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("databaseNames:", databaseNames)
+	fmt.Println("user name is", user["firstName"], user["lastName"])
 }
 
 func main() {
@@ -48,9 +45,9 @@ Done:
 2. Find how to call functions which are in another package
 3. Learn how to use env variables.
 4. Make a util function for creating mongo client.
+5. Fetch all the data from a collection.
 
 To Do:
-5. Fetch all the data from a collection.
 6. Make a repo layer for the same collection.
 7. Create endpoints regarding CRUD-user.
 8. Deploy the changes on heroku.
