@@ -22,11 +22,11 @@ func connectMongoAndQueryDatabase() {
 
 	defer mongoClient.Disconnect(ctx)
 
-	userCollection := mongoClient.Database("test").Collection("users")
+	userModel := mongoUtils.CreateCollectionModel(mongoClient, "users")
 
 	var user bson.M
 
-	err := userCollection.FindOne(ctx, bson.M{"emailId": "mohitvachhanispam@gmail.com"}).Decode(&user)
+	err := userModel.FindOne(ctx, bson.M{"emailId": "mohitvachhanispam@gmail.com"}).Decode(&user)
 
 	if err != nil {
 		log.Fatal(err)

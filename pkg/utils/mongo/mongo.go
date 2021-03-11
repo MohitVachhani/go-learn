@@ -28,3 +28,11 @@ func CreateMongoClient(ctx context.Context, mongoURI string) *mongo.Client {
 
 	return client
 }
+
+// CreateCollectionModel is
+func CreateCollectionModel(mongoClient *mongo.Client, collectionName string) *mongo.Collection {
+
+	collectionModel := mongoClient.Database("test").Collection(collectionName)
+
+	return collectionModel
+}
