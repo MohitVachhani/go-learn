@@ -82,6 +82,7 @@ Done:
 To Do:
 6. Make a repo layer for the same collection.
 8. Create endpoints regarding CRUD-user.
-9. Deploy the changes on heroku.
+9. Deploy the changes on heroku. (https://naruto-go.herokuapp.com/)
 10. Automate the deployment method.
+
 */
