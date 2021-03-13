@@ -1,2 +1,2 @@
-web: bin/go-getting-started
+web: go run cmd/main.go
 
