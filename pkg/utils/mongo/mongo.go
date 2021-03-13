@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/MohitVachhani/go-learn/pkg/utils/env"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -29,10 +30,12 @@ func CreateMongoClient(ctx context.Context, mongoURI string) *mongo.Client {
 	return client
 }
 
-// CreateCollectionModel is
-func CreateCollectionModel(mongoClient *mongo.Client, collectionName string) *mongo.Collection {
+// GetCollection is
+func GetCollection(mongoClient *mongo.Client, collectionName string) *mongo.Collection {
 
-	collectionModel := mongoClient.Database("test").Collection(collectionName)
+	database := env.Get("DATABASE")
+
+	collectionModel := mongoClient.Database(database).Collection(collectionName)
 
 	return collectionModel
 }

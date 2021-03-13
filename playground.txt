@@ -207,3 +207,18 @@
 
 // 	fmt.Println(value)
 // }
+
+func testHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hitting test endpoint")
+	fmt.Fprintf(w, "hello from server")
+}
+
+func server() {
+	r := mux.NewRouter()
+
+	r.HandleFunc("/test", testHandler).Methods("GET")
+
+	port := ":" + env.Get("PORT")
+
+	log.Fatal(http.ListenAndServe(port, r))
+}
