@@ -222,3 +222,34 @@ func server() {
 
 	log.Fatal(http.ListenAndServe(port, r))
 }
+
+
+func getUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hitting test endpoint")
+
+	// GET params
+	params := mux.Vars(r)
+
+	// Body params
+	// _ := json.NewDecoder(w).Decode(user)
+
+	fmt.Println("hello from server", params)
+
+	user := connectMongoAndQueryDatabase()
+
+	// returns the client with json.
+	json.NewEncoder(w).Encode(user)
+}
+
+func server() {
+
+	// init router
+	var r = mux.NewRouter()
+
+	// route handlers
+	r.HandleFunc("/user/get", getUser).Methods("GET")
+
+	// start server and throw error if anything goes wrong.
+	port := ":" + env.Get("PORT")
+	log.Fatal(http.ListenAndServe(port, r))
+}
