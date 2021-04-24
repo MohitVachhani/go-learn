@@ -2,87 +2,49 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
 
-	userRepo "github.com/MohitVachhani/go-learn/cmd/repo/user"
-	"github.com/MohitVachhani/go-learn/pkg/utils/env"
+	userController "github.com/MohitVachhani/go-learn/cmd/controller/user"
 	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
-	"github.com/gorilla/mux"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/gorilla/mux"
 )
 
-func connectMongoAndQueryDatabase() bson.M {
-
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-
-	mongoURI := envUtil.Get("MONGO_URI")
-
-	mongoClient := mongoUtils.CreateMongoClient(ctx, mongoURI)
-
-	defer mongoClient.Disconnect(ctx)
-
-	userCollection := mongoUtils.GetCollection(mongoClient, "users")
-
-	var user bson.M = userRepo.GetUserByEmailID(ctx, userCollection, "mohitvachhanispam@gmail.com")
-
-	fmt.Println("user name is", user["firstName"], user["lastName"])
-
-	return user
-}
-
-func getUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("hitting test endpoint")
-
-	// GET params
-	params := mux.Vars(r)
-
-	// Body params
-	// _ := json.NewDecoder(w).Decode(user)
-
-	fmt.Println("hello from server", params)
-
-	user := connectMongoAndQueryDatabase()
-
-	// returns the client with json.
-	json.NewEncoder(w).Encode(user)
-}
-
-func server() {
+func initializeRoutes() {
 
 	// init router
-	var r = mux.NewRouter()
+	var router = mux.NewRouter()
 
 	// route handlers
-	r.HandleFunc("/user/get", getUser).Methods("GET")
+	router.HandleFunc("/auth/email/signUp", userController.RegisterUser).Methods("POST")
+
+	router.HandleFunc("/user/get", userController.GetUser).Methods("GET")
 
 	// start server and throw error if anything goes wrong.
-	port := ":" + env.Get("PORT")
-	log.Fatal(http.ListenAndServe(port, r))
+	port := ":" + envUtil.Get("PORT")
+	log.Fatal(http.ListenAndServe(port, router))
+
 }
 
 func main() {
-	server()
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+
+	mongoClient := mongoUtils.MongoConnection(ctx)
+	defer mongoClient.Disconnect(ctx)
+
+	initializeRoutes()
+
 }
 
-/**
-Done:
-1. Find how to call functions which are in another file
-2. Find how to call functions which are in another package
-3. Learn how to use env variables.
-4. Make a util function for creating mongo client.
-5. Fetch all the data from a collection.
-7. setup mux for endpoint.
+/*
 
-To Do:
-6. Make a repo layer for the same collection.
-8. Create endpoints regarding CRUD-user.
-9. Deploy the changes on heroku. (https://naruto-go.herokuapp.com/)
-10. Automate the deployment method.
+1. Auth apis. (Normal)
+2. CRUD Categories api.
+3. CRUD State api.
+4. create a contact api in that category api.
+5. upVote a contact api.
 
 */

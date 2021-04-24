@@ -5,13 +5,18 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/MohitVachhani/go-learn/pkg/utils/env"
+	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var MongoClient *mongo.Client
+
 // CreateMongoClient is
-func CreateMongoClient(ctx context.Context, mongoURI string) *mongo.Client {
+func createMongoClient(ctx context.Context) *mongo.Client {
+
+	mongoURI := envUtil.Get("MONGO_URI")
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
 
@@ -33,9 +38,16 @@ func CreateMongoClient(ctx context.Context, mongoURI string) *mongo.Client {
 // GetCollection is
 func GetCollection(mongoClient *mongo.Client, collectionName string) *mongo.Collection {
 
-	database := env.Get("DATABASE")
+	database := envUtil.Get("DATABASE")
 
 	collectionModel := mongoClient.Database(database).Collection(collectionName)
 
 	return collectionModel
+}
+
+func MongoConnection(ctx context.Context) *mongo.Client {
+
+	MongoClient = createMongoClient(ctx)
+
+	return MongoClient
 }
