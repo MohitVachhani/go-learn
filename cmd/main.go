@@ -38,13 +38,3 @@ func main() {
 	initializeRoutes()
 
 }
-
-/*
-
-1. Auth apis. (Normal)
-2. CRUD Categories api.
-3. CRUD State api.
-4. create a contact api in that category api.
-5. upVote a contact api.
-
-*/

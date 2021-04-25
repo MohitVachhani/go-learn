@@ -1,13 +1,14 @@
 package userservice
 
 import (
-	"context"
 	"fmt"
-	"time"
 
 	userRepo "github.com/MohitVachhani/go-learn/cmd/repo/user"
 	registerUserInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
+
 	userInterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
+	authUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func RegisterUser(registerUserInput registerUserInterface.RegisterUserInput) {
@@ -20,15 +21,34 @@ func RegisterUser(registerUserInput registerUserInterface.RegisterUserInput) {
 
 	user := GetUser(userFiters)
 
-	fmt.Println(user)
+	if (userInterface.User{} == user) {
+		fmt.Println("no user found with the following emailId", emailID)
 
+		var createUserInput userInterface.CreateUserInput
+		var encryptedPassword = authUtil.ConvertToEncryptedString(registerUserInput.Password)
+
+		createUserInput.EmailID = emailID
+		createUserInput.Password = encryptedPassword
+		createUserInput.SignUpType = "email"
+
+		createUser(createUserInput)
+
+	} else {
+		fmt.Println("User already exists with this emailId:", emailID)
+	}
 }
 
 // User service layer for getting user
 func GetUser(userFilters userInterface.UserFilters) userInterface.User {
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 
-	user := userRepo.GetUser(ctx, userFilters)
+	user := userRepo.GetUser(userFilters)
+
+	return user
+}
+
+func createUser(createUserInput userInterface.CreateUserInput) bson.M {
+
+	user := userRepo.CreateUser(createUserInput)
 
 	return user
 }
