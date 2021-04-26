@@ -6,7 +6,8 @@ import (
 	userservice "github.com/MohitVachhani/go-learn/cmd/service/user"
 	authInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
 	userInterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
-	passwordutil "github.com/MohitVachhani/go-learn/pkg/utils/auth"
+	authUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/accessToken"
+	passwordUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/password"
 )
 
 func EmailLogin(emailLoginInput authInterface.EmailLoginInput) authInterface.EmailLoginOutput {
@@ -28,9 +29,11 @@ func EmailLogin(emailLoginInput authInterface.EmailLoginInput) authInterface.Ema
 
 	var userPassword = user.Password
 
-	var inputPassword = passwordutil.ConvertToEncryptedString(emailLoginInput.Password)
+	var inputPassword = passwordUtil.ConvertToEncryptedString(emailLoginInput.Password)
 
 	if userPassword == inputPassword {
+		authUtil.CreateToken(emailLoginInput.EmailID)
+
 		return authInterface.EmailLoginOutput{
 			Success: true,
 		}
@@ -40,5 +43,4 @@ func EmailLogin(emailLoginInput authInterface.EmailLoginInput) authInterface.Ema
 		Success:   true,
 		ErrorCode: "PASSWORD_NOT_CORRECT",
 	}
-
 }

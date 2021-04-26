@@ -7,7 +7,7 @@ import (
 	registerUserInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
 
 	userInterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
-	authUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth"
+	passwordUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/password"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -25,7 +25,7 @@ func RegisterUser(registerUserInput registerUserInterface.RegisterUserInput) {
 		fmt.Println("no user found with the following emailId", emailID)
 
 		var createUserInput userInterface.CreateUserInput
-		var encryptedPassword = authUtil.ConvertToEncryptedString(registerUserInput.Password)
+		var encryptedPassword = passwordUtil.ConvertToEncryptedString(registerUserInput.Password)
 
 		createUserInput.EmailID = emailID
 		createUserInput.Password = encryptedPassword
