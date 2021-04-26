@@ -19,10 +19,10 @@ type CreateUserInput struct {
 
 type User struct {
 	ID         primitive.ObjectID  `json:"_id" bson:"_id,omitempty"`
-	EmailID    string              `json:"emailId"`
+	EmailID    string              `json:"emailId" bson:"emailId"`
 	Password   string              `json:"password"`
-	SignUpType string              `json:"signUpType"`
-	CreatedAt  time.Time           `json:"createdAt"`
+	SignUpType string              `json:"signUpType" bson:"signUpType"`
+	CreatedAt  time.Time           `json:"createdAt" bson:"createdAt"`
 	LastLogin  primitive.Timestamp `json:"lastLogin" bson:"lastLogin,omitempty"`
 	UpdatedAt  primitive.Timestamp `json:"updatedAt" bson:"updatedAt,omitempty"`
 }

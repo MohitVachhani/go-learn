@@ -20,6 +20,7 @@ func initializeRoutes() {
 
 	// route handlers
 	router.HandleFunc("/auth/email/signUp", userController.RegisterUser).Methods("POST")
+	router.HandleFunc("/auth/email/login", userController.EmailLogin).Methods("POST")
 
 	router.HandleFunc("/user/get", userController.GetUser).Methods("GET")
 
