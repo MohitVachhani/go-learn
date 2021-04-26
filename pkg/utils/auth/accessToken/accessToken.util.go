@@ -1,7 +1,6 @@
 package accesstokenutil
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -18,7 +17,7 @@ func CreateToken(emailId string) string {
 	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 	atClaims["tokenUse"] = "accessToken"
 
-	at := jwt.NewWithClaims(jwt.SigningMethodES256, atClaims)
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 
 	token, err := at.SignedString([]byte(jwtSecret))
 
@@ -26,6 +25,5 @@ func CreateToken(emailId string) string {
 		log.Fatal("Error while creating token", err)
 	}
 
-	fmt.Println(token)
 	return token
 }
