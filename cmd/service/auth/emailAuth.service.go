@@ -6,7 +6,7 @@ import (
 	userservice "github.com/MohitVachhani/go-learn/cmd/service/user"
 	authInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
 	userInterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
-	authUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/accessToken"
+	accessTokenUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/accessToken"
 	passwordUtil "github.com/MohitVachhani/go-learn/pkg/utils/auth/password"
 )
 
@@ -32,15 +32,28 @@ func EmailLogin(emailLoginInput authInterface.EmailLoginInput) authInterface.Ema
 	var inputPassword = passwordUtil.ConvertToEncryptedString(emailLoginInput.Password)
 
 	if userPassword == inputPassword {
-		authUtil.CreateToken(emailLoginInput.EmailID)
+		accessToken := accessTokenUtil.CreateAccessToken(authInterface.AccessTokenPayload{
+			TokenUse: "accessToken",
+			EmailId:  user.EmailID,
+			UserId:   user.ID.Hex(),
+		})
+
+		refreshToken := accessTokenUtil.CreateRefreshToken(authInterface.RefreshTokenPayload{
+			TokenUse: "refreshToken",
+			UserId:   user.ID.Hex(),
+		})
 
 		return authInterface.EmailLoginOutput{
 			Success: true,
+			LoginToken: &authInterface.LoginToken{
+				AccessToken:  accessToken,
+				RefreshToken: refreshToken,
+			},
 		}
 	}
 
 	return authInterface.EmailLoginOutput{
-		Success:   true,
+		Success:   false,
 		ErrorCode: "PASSWORD_NOT_CORRECT",
 	}
 }
