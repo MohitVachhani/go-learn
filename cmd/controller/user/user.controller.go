@@ -8,9 +8,10 @@ import (
 
 	authService "github.com/MohitVachhani/go-learn/cmd/service/auth"
 	userService "github.com/MohitVachhani/go-learn/cmd/service/user"
-
 	authInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
 	userinterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
+	accesstokenutil "github.com/MohitVachhani/go-learn/pkg/utils/auth/accessToken"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -57,12 +58,23 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	// Query parameters
 	var emailID = r.URL.Query().Get("emailId")
 
-	var userFilters userinterface.UserFilters
+	// read key value from request headers
+	var accessToken = r.Header.Get("accesstoken")
 
-	userFilters.EmailID = emailID
+	_, errorCode := accesstokenutil.VerifyAccessToken(accessToken)
+
+	if len(errorCode) > 0 {
+		json.NewEncoder(w).Encode(bson.M{"success": false, "errorCode": errorCode})
+		return
+	}
+
+	var userFilters = userinterface.UserFilters{
+		EmailID: emailID,
+	}
 
 	user := userService.GetUser(userFilters)
 
 	// returns the client with json.
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(bson.M{"success": true, "user": user})
+	return
 }

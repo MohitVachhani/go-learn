@@ -50,3 +50,34 @@ func CreateRefreshToken(payload authInterface.RefreshTokenPayload) string {
 
 	return token
 }
+
+func VerifyAccessToken(accessToken string) (authInterface.AccessTokenPayload, string) {
+
+	var jwtSecret = envUtil.Get("JWT_SECRET")
+
+	claims := jwt.MapClaims{}
+
+	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
+	})
+
+	if err != nil {
+		return authInterface.AccessTokenPayload{}, "INVALID_TOKEN"
+	}
+
+	if token.Valid == false {
+		return authInterface.AccessTokenPayload{}, "NOT_VALID"
+	}
+
+	if claims["tokenUse"] != "accessToken" {
+		return authInterface.AccessTokenPayload{}, "NOT_ACCESS_TOKEN"
+	}
+
+	var emailId = claims["emailId"].(string)
+	var userId = claims["userId"].(string)
+
+	return authInterface.AccessTokenPayload{
+		EmailId: emailId,
+		UserId:  userId,
+	}, ""
+}
