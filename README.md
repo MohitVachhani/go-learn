@@ -2,7 +2,9 @@
 
 This is just a repo for learning GO.
 
-go build
-go run
-go mod init "package-name"
-go get -> to add module
+Implemented:
+
+1. User Email SignUp.
+2. User Email Login.
+3. Creating JWT LoginTokens: (accessToken, refreshToken)
+4. GetUser api secured with accessToken.
