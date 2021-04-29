@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"time"
 
-	userController "github.com/MohitVachhani/go-learn/cmd/controller/user"
 	userRouter "github.com/MohitVachhani/go-learn/cmd/router/user"
 	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
+
+	emailAuthRouter "github.com/MohitVachhani/go-learn/cmd/router/auth/email"
 
 	"github.com/gorilla/mux"
 )
@@ -18,12 +19,14 @@ func initializeRoutes() {
 
 	// init router
 	var router = mux.NewRouter()
-	userR := router.PathPrefix("/user").Subrouter()
-	userRouter.InitUserR(userR)
 
-	// route handlers
-	router.HandleFunc("/auth/email/signUp", userController.RegisterUser).Methods("POST")
-	router.HandleFunc("/auth/email/login", userController.EmailLogin).Methods("POST")
+	// user router
+	userR := router.PathPrefix("/user").Subrouter()
+	userRouter.InitUserRouter(userR)
+
+	// auth router
+	authR := router.PathPrefix("/auth").Subrouter()
+	emailAuthRouter.InitalizeEmailAuthRouter(authR)
 
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")
