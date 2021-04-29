@@ -7,6 +7,7 @@ import (
 	"time"
 
 	userController "github.com/MohitVachhani/go-learn/cmd/controller/user"
+	userRouter "github.com/MohitVachhani/go-learn/cmd/router/user"
 	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
 
@@ -17,12 +18,12 @@ func initializeRoutes() {
 
 	// init router
 	var router = mux.NewRouter()
+	userR := router.PathPrefix("/user").Subrouter()
+	userRouter.InitUserR(userR)
 
 	// route handlers
 	router.HandleFunc("/auth/email/signUp", userController.RegisterUser).Methods("POST")
 	router.HandleFunc("/auth/email/login", userController.EmailLogin).Methods("POST")
-
-	router.HandleFunc("/user/get", userController.GetUser).Methods("GET")
 
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")
