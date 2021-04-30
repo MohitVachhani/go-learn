@@ -11,6 +11,7 @@ import (
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
 
 	emailAuthRouter "github.com/MohitVachhani/go-learn/cmd/router/auth/email"
+	googleAuthRouter "github.com/MohitVachhani/go-learn/cmd/router/auth/google"
 
 	"github.com/gorilla/mux"
 )
@@ -27,6 +28,7 @@ func initializeRoutes() {
 	// auth router
 	authR := router.PathPrefix("/auth").Subrouter()
 	emailAuthRouter.InitalizeEmailAuthRouter(authR)
+	googleAuthRouter.InitializeGoogleAuthRouter(authR)
 
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")

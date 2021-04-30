@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	authService "github.com/MohitVachhani/go-learn/cmd/service/auth"
+	authService "github.com/MohitVachhani/go-learn/cmd/service/auth/email"
 	userService "github.com/MohitVachhani/go-learn/cmd/service/user"
 	authInterface "github.com/MohitVachhani/go-learn/pkg/structs/auth"
 	userinterface "github.com/MohitVachhani/go-learn/pkg/structs/user"
