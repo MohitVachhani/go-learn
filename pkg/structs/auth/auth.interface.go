@@ -39,3 +39,7 @@ type RefreshTokenPayload struct {
 	TokenUse TokenUse `json:"tokenUse"bson:"tokenUse"`
 	UserId   string   `json:"userId"bson:"userId"`
 }
+
+type GoogleAuthInput struct {
+	AuthType string `json:"authType"bson:"authType"`
+}

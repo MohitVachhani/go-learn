@@ -52,8 +52,11 @@ func CreateUser(input userInterface.CreateUserInput) bson.M {
 	var createUserInput userInterface.User = userInterface.User{
 		EmailID:    input.EmailID,
 		Password:   input.Password,
-		SignUpType: "email",
+		SignUpType: input.SignUpType,
 		CreatedAt:  time.Now().UTC(),
+		FirstName:  input.FirstName,
+		LastName:   input.LastName,
+		Status:     input.Status,
 	}
 
 	insertOneUserResult, err := userCollection.InsertOne(ctx, createUserInput)

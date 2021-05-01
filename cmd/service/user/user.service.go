@@ -30,8 +30,9 @@ func RegisterUser(registerUserInput registerUserInterface.RegisterUserInput) {
 		createUserInput.EmailID = emailID
 		createUserInput.Password = encryptedPassword
 		createUserInput.SignUpType = "email"
+		createUserInput.Status = "active"
 
-		createUser(createUserInput)
+		CreateUser(createUserInput)
 
 	} else {
 		fmt.Println("User already exists with this emailId:", emailID)
@@ -46,7 +47,7 @@ func GetUser(userFilters userInterface.UserFilters) userInterface.User {
 	return user
 }
 
-func createUser(createUserInput userInterface.CreateUserInput) bson.M {
+func CreateUser(createUserInput userInterface.CreateUserInput) bson.M {
 
 	user := userRepo.CreateUser(createUserInput)
 
