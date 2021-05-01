@@ -41,5 +41,11 @@ type RefreshTokenPayload struct {
 }
 
 type GoogleAuthInput struct {
-	AuthType string `json:"authType"bson:"authType"`
+	AuthType string `json:"authType" bson:"authType"`
+}
+
+type GoogleAuthPayload struct {
+	Success    bool        `json:"success" bson:"success"`
+	ErrorCode  string      `json:"errorCode,omitempty" bson:"errorCode,omitempty"`
+	LoginToken *LoginToken `json:"loginToken,omitempty" bson:"loginToken,omitempty"`
 }
