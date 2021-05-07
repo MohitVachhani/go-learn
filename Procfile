@@ -1,2 +1,2 @@
-web: go-learn
+web: cmd
 
