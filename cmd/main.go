@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	graphqlRouter "github.com/MohitVachhani/go-learn/cmd/router/graphql"
 	userRouter "github.com/MohitVachhani/go-learn/cmd/router/user"
 	envUtil "github.com/MohitVachhani/go-learn/pkg/utils/env"
 	mongoUtils "github.com/MohitVachhani/go-learn/pkg/utils/mongo"
@@ -29,6 +30,10 @@ func initializeRoutes() {
 	authR := router.PathPrefix("/auth").Subrouter()
 	emailAuthRouter.InitalizeEmailAuthRouter(authR)
 	googleAuthRouter.InitializeGoogleAuthRouter(authR)
+
+	// graphql router
+	apiR := router.PathPrefix("/api").Subrouter()
+	graphqlRouter.InitializeGraphqlRouter(apiR)
 
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")

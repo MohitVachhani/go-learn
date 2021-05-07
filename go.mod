@@ -4,8 +4,10 @@ go 1.15
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/friendsofgo/graphiql v0.2.2
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/sessions v1.1.1
+	github.com/graph-gophers/graphql-go v1.1.0
 	github.com/joho/godotenv v1.3.0
 	github.com/markbates/goth v1.67.1
 	go.mongodb.org/mongo-driver v1.4.6
