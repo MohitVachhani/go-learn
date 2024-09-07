@@ -19,7 +19,7 @@ import (
 )
 
 func initializeRoutes() {
-	fmt.Println("Initializing routes")
+	fmt.Println("Initializing routes...")
 
 	// init router
 	var router = mux.NewRouter()
