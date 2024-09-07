@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -18,6 +19,7 @@ import (
 )
 
 func initializeRoutes() {
+	fmt.Println("Initializing routes")
 
 	// init router
 	var router = mux.NewRouter()
