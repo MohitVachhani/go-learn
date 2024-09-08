@@ -19,7 +19,7 @@ import (
 )
 
 func initializeRoutes() {
-	fmt.Println("Initializing routes...")
+	fmt.Println("Initializing routes")
 
 	// init router
 	var router = mux.NewRouter()
@@ -36,6 +36,10 @@ func initializeRoutes() {
 	// resource route
 	resourceR := router.PathPrefix("/resource").Subrouter()
 	resourceRouter.InitializeResourceRouter(resourceR)
+
+	// learning route
+	learningR := router.PathPrefix("/learning").Subrouter()
+	resourceRouter.InitializeResourceRouter(learningR)
 
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")
