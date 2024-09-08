@@ -37,6 +37,10 @@ func initializeRoutes() {
 	resourceR := router.PathPrefix("/resource").Subrouter()
 	resourceRouter.InitializeResourceRouter(resourceR)
 
+	// learning route
+	learningR := router.PathPrefix("/learning").Subrouter()
+	resourceRouter.InitializeResourceRouter(learningR)
+
 	// start server and throw error if anything goes wrong.
 	port := ":" + envUtil.Get("PORT")
 	log.Fatal(http.ListenAndServe(port, router))
