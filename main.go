@@ -70,8 +70,8 @@ import (
 func main() {
 	conf := pdfcpu.NewDefaultConfiguration()
 
-	err := api.ExtractImagesFile("page_1_modern.pdf", "./out", nil, )
+	err := api.ExtractImagesFile("page_1_modern.pdf", "./out", nil)
 	if err != nil {
-		log.Fatal("No images found or extraction failed:", err)
+		log.Fatal("No images found or extraction failed", err)
 	}
 }
